@@ -104,16 +104,24 @@ console.log("MCP SSE server running at http://localhost:3000/mcp/sse");
 
 ## Route Configuration (`config.mcp`)
 
-You can add specific MCP configurations directly within a route's `config` object:
+You can add specific MCP configurations directly within a route's `config` object. The following options are available:
+
+| Option        | Type      | Default                       | Description                         |
+| ------------- | --------- | ----------------------------- | ----------------------------------- |
+| `hidden`      | `boolean` | `false`                       | Hide this route from the MCP Server |
+| `name`        | `string`  | `operationId` or `method_url` | Override the default tool name      |
+| `description` | `string`  | Route's schema description    | Override the tool description       |
+
+Example usage:
 
 ```typescript
 fastify.get(
-  "/internal/stuff",
+  "/some-route",
   {
     config: {
       mcp: {
-        hidden: true, // Hide this route from MCP tools
-        operationId: "custom_tool_name", // Override the default tool name
+        name: "custom_tool_name", // Override the default tool name
+        description: "Custom description for this tool", // Override the default description
       },
     },
     // ... other route options
