@@ -2,7 +2,7 @@ import fastify from "fastify";
 import type { FastifyInstance, FastifyPluginAsync } from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
-import mcpPlugin from "../src/index.ts";
+import mcpPlugin from "@mcp-it/fastify";
 
 // Todo interface
 interface Todo {

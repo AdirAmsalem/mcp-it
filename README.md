@@ -30,7 +30,7 @@ import mcpPlugin from "@mcp-it/fastify";
 const fastify = Fastify();
 
 // Register the MCP plugin
-fastify.register(mcpPlugin, {
+await fastify.register(mcpPlugin, {
   name: "My API",
   description: "My API with MCP support",
 });
