@@ -171,25 +171,23 @@ http://localhost:3000/mcp/sse
 
 (Replace `localhost:3000` with your server's address and `mcp` with your `mountPath` if customized).
 
-_Alternatively, you can use the Streamable HTTP endpoint if your client supports it (Cursor might require configuration or proxying for non-SSE endpoints)._
-
 ### Claude Desktop
 
-Use [mcp-proxy](https://github.com/sparfenyuk/mcp-proxy) to bridge between Claude Desktop (which expects stdio) and the SSE or Streamable HTTP endpoint.
+Use [mcp-proxy](https://github.com/sparfenyuk/mcp-proxy) to bridge between Claude Desktop (which expects stdio) and the SSE endpoint.
 
-1. Install `mcp-proxy`: `npm install -g mcp-proxy` or `pip install mcp-proxy`.
-2. Find the path to the `mcp-proxy` executable (e.g., `which mcp-proxy`).
-3. Add the following to your Claude Desktop MCP config file (`claude_desktop_config.json`):
+Add the following to your Claude Desktop MCP config file (`claude_desktop_config.json`):
 
 ```json
 {
   "mcpServers": {
     "my-fastify-api": {
-      "command": "/full/path/to/mcp-proxy",
-      "args": ["http://127.0.0.1:3000/mcp/sse"]
+      "command": "npx",
+      "args": ["mcp-remote", "http://localhost:3000/mcp/sse"]
     }
   }
 }
 ```
 
-(Replace the command path and URL as needed. You can point `mcp-proxy` to either the SSE (`/mcp/sse`) or Streamable HTTP (`/mcp`) endpoint).
+(Replace `localhost:3000` with your server's address and `mcp` with your `mountPath` if customized).
+
+_Alternatively, you can use the Streamable HTTP endpoint if your client supports it (Cursor might require configuration or proxying for non-SSE endpoints)._
