@@ -62,7 +62,7 @@ fastify.get(
         },
       },
     },
-    // Add MCP-specific config to hide this route if needed
+    // Add MCP-specific config if needed, e.g.:
     // config: {
     //   mcp: { hidden: true }
     // }
@@ -91,7 +91,7 @@ console.log("MCP SSE server running at http://localhost:3000/mcp/sse");
 ## Configuration Options
 
 | Option               | Type       | Default                  | Description                                                         |
-| -------------------- | ---------- | ------------------------ | ------------------------------------------------------------------- | ------------------------- |
+| -------------------- | ---------- | ------------------------ | ------------------------------------------------------------------- |
 | `name`               | `string`   | "Fastify MCP"            | Name for the MCP server displayed to the client.                    |
 | `description`        | `string`   | "MCP server for Fastify" | Description for the MCP server.                                     |
 | `transportType`      | `string`   | `"sse"`                  | Transport protocol to use: `"sse"` or `"streamableHttp"`.           |
@@ -99,7 +99,7 @@ console.log("MCP SSE server running at http://localhost:3000/mcp/sse");
 | `skipHeadRoutes`     | `boolean`  | `true`                   | Exclude `HEAD` routes from the generated MCP tools.                 |
 | `skipOptionsRoutes`  | `boolean`  | `true`                   | Exclude `OPTIONS` routes from the generated MCP tools.              |
 | `mountPath`          | `string`   | `"/mcp"`                 | Base path prefix where MCP SSE and message endpoints are mounted.   |
-| `filter`             | `Function` | `undefined`              | Custom function `(route: Route) => boolean                          | undefined` for filtering. |
+| `filter`             | `Function` | `undefined`              | Custom function `(route: Route) => boolean` for filtering.          |
 | `addDebugEndpoint`   | `boolean`  | `false`                  | Add a `GET /<mountPath>/tools` endpoint listing generated tools.    |
 
 ## Route Configuration (`config.mcp`)
