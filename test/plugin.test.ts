@@ -200,6 +200,81 @@ describe("Fastify MCP Plugin", () => {
     });
   });
 
+  test("should use auth header", async (t) => {
+    const { address } = await setupFastify(fastify, (fastify) => {
+      fastify.get(
+        "/hello",
+        {
+          config: {
+            mcp: {
+              name: "my_hello",
+              description: "The is my hello tool",
+            },
+          },
+          schema: {
+            operationId: "hello",
+            summary: "Hello World",
+            description: "Says hello",
+            headers: {
+              type: "object",
+              properties: {
+                authorization: {
+                  type: "string",
+                  description: "Authorization header as a bearer token",
+                },
+              },
+              required: ["authorization"],
+            }
+          },
+        },
+        () => "Hello World"
+      );
+    });
+
+    const transport = new SSEClientTransport(new URL(`${address}/mcp/sse`));
+    await client.connect(transport);
+
+    const listToolsResult = await client.listTools();
+    t.assert.deepEqual(listToolsResult, {
+      tools: [
+        {
+          name: "my_hello",
+          description: "Hello World\n\nThe is my hello tool",
+          inputSchema: {
+            properties: {
+              authorization: {
+                description: 'Authorization header as a bearer token',
+                title: 'authorization',
+                type: 'string'
+              }
+            },
+            required: [
+              'authorization'
+            ],
+            title: "my_helloParameters",
+            type: "object",
+          },
+        },
+      ],
+    });
+
+    const toolResult = await client.callTool({
+      name: "my_hello",
+      arguments: {
+        authorization: "Bearer ia"
+      },
+    });
+
+    t.assert.deepEqual(toolResult, {
+      content: [
+        {
+          type: "text",
+          text: "Hello World",
+        },
+      ],
+    });
+  });
+
   test("should use the published package", async (t) => {
     await fastify.register(import("@mcp-it/fastify"), {
       name: "Test API",
