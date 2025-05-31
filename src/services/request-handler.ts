@@ -8,6 +8,7 @@ export function requestHandler(fastify: FastifyInstance) {
     args: Record<string, any>
   ): McpToolPayload {
     const payload: McpToolPayload = {
+      headers: {},
       params: {},
       query: {},
       body: {},
@@ -15,6 +16,10 @@ export function requestHandler(fastify: FastifyInstance) {
 
     // Assign parameters to the appropriate location
     for (const [key, value] of Object.entries(args)) {
+      // Check if this is a header parameter
+      if (route.headers?.properties?.[key]) {
+        payload.headers[key] = value;
+      }
       // Check if this is a path parameter
       if (route.params?.properties?.[key]) {
         payload.params[key] = value;
@@ -68,6 +73,7 @@ export function requestHandler(fastify: FastifyInstance) {
 
     // Execute request using fastify.inject
     const result = await fastify.inject({
+      headers: payload.headers,
       method: route.methods[0],
       url,
       query: payload.query,

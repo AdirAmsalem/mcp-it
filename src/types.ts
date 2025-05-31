@@ -15,6 +15,7 @@ export interface Route {
   summary?: string;
   description?: string;
   tags?: string[];
+  headers?: any;
   querystring?: any;
   body?: any;
   params?: any;
@@ -89,6 +90,7 @@ export interface McpTool {
 }
 
 export interface McpToolPayload {
+  headers: Record<string, any>;
   params: Record<string, any>;
   query: Record<string, any>;
   body: Record<string, any>;

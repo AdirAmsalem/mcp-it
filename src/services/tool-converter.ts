@@ -44,6 +44,22 @@ export function toolConverter(options: McpPluginOptions) {
     const properties: Record<string, any> = {};
     const required: string[] = [];
 
+    // Add header parameters
+    if (route.headers) {
+      for (const [key, schema] of Object.entries(
+        route.headers.properties || {}
+      )) {
+        properties[key] = {
+          type: getSchemaType(schema),
+          title: key,
+          description: (schema as any).description ?? `Header: ${key}`,
+        };
+        if ((route.headers.required || []).includes(key)) {
+          required.push(key);
+        }
+      }
+    }
+
     // Add path parameters
     if (route.params) {
       for (const [key, schema] of Object.entries(

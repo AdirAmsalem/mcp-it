@@ -234,6 +234,10 @@ const McpPlugin: FastifyPluginAsync<McpPluginOptions> = async (
         routeOptions.schema?.body,
         routeOptions.schema
       ),
+      headers: resolveSchemaReferences(
+        routeOptions.schema?.headers,
+        routeOptions.schema
+      ),
       params: resolveSchemaReferences(
         routeOptions.schema?.params,
         routeOptions.schema
