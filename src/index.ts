@@ -62,6 +62,7 @@ const McpPlugin: FastifyPluginAsync<McpPluginOptions> = async (
     transportType: "sse",
     skipHeadRoutes: true,
     skipOptionsRoutes: true,
+    toJSONSchema: (schema: any) => schema,
     ..._options,
   };
 
@@ -227,24 +228,25 @@ const McpPlugin: FastifyPluginAsync<McpPluginOptions> = async (
         ((routeOptions.schema as any)?.description as string),
       tags,
       querystring: resolveSchemaReferences(
-        routeOptions.schema?.querystring,
+        options.toJSONSchema?.(routeOptions.schema?.querystring) || routeOptions.schema?.querystring,
         routeOptions.schema
       ),
       body: resolveSchemaReferences(
-        routeOptions.schema?.body,
+        options.toJSONSchema?.(routeOptions.schema?.body) || routeOptions.schema?.body,
         routeOptions.schema
       ),
       headers: resolveSchemaReferences(
-        routeOptions.schema?.headers,
+        options.toJSONSchema?.(routeOptions.schema?.headers) || routeOptions.schema?.headers,
         routeOptions.schema
       ),
       params: resolveSchemaReferences(
-        routeOptions.schema?.params,
+        options.toJSONSchema?.(routeOptions.schema?.params) || routeOptions.schema?.params,
         routeOptions.schema
       ),
       response: resolveSchemaReferences(
-        (routeOptions.schema?.response as any)?.[200] ||
-          (routeOptions.schema?.response as any)?.["2xx"],
+        options.toJSONSchema?.((routeOptions.schema?.response as any)?.[200] ||
+          (routeOptions.schema?.response as any)?.["2xx"]) || (routeOptions.schema?.response as any)?.[200] ||
+        (routeOptions.schema?.response as any)?.["2xx"],
         routeOptions.schema
       ),
     });

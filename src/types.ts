@@ -76,6 +76,13 @@ export interface McpPluginOptions {
    * @default "sse"
    */
   transportType?: "streamableHttp" | "sse";
+
+  /**
+   * A function to convert api schema to JSONSchema
+   * @param schema - Api schema used by Fastify, zod etc
+   * @returns `JSONSchema` a valid JSON schema object
+   */
+  toJSONSchema?: (schema: any) => {[k: string]: unknown;};
 }
 
 export interface McpTool {
