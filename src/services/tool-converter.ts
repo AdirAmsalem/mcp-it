@@ -1,43 +1,41 @@
 import type { Route, McpTool, McpPluginOptions } from "../types.ts";
 import { generateExampleFromSchema, getSchemaType } from "./schema.ts";
 
+function asMDJson(obj: any):string {
+  return '```json\n' + JSON.stringify(obj, null, 2) + '\n```'
+}
+
 export function toolConverter(options: McpPluginOptions) {
   function buildToolName(route: Route): string {
     return route.name;
   }
 
   function buildToolDescription(route: Route): string {
-    let description = route.summary;
+    const description: (string|undefined)[] = [route.summary, route.description];
 
-    if (route.description) {
-      description += `\n\n${route.description}`;
-    }
 
     if (route.tags && route.tags.length > 0) {
-      description += `\n\nTags: ${route.tags.join(", ")}`;
+      description.push(`Tags: ${route.tags.join(", ")}`);
     }
 
     // Add response schema information if available
     if (route.response && options.describeFullSchema) {
-      description += "\n\n### Response:";
+      description.push("### Response:");
 
       // Get response example
       const example = generateExampleFromSchema(route.response);
       if (example) {
-        description += "\n\n**Example Response:**\n```json\n";
-        description += JSON.stringify(example, null, 2);
-        description += "\n```";
+        description.push(`**Example Response:**\n${asMDJson(example)}`);
       }
 
       // Add schema information
       if (options.describeFullSchema) {
-        description += "\n\n**Output Schema:**\n```json\n";
-        description += JSON.stringify(route.response, null, 2);
-        description += "\n```";
+
+        description.push(`**Output Schema:**${asMDJson(route.response)}`);
       }
     }
 
-    return description || route.name;
+    return description.filter(Boolean).join('\n\n') || route.name;
   }
 
   function buildToolInputSchema(route: Route): McpTool["inputSchema"] {
