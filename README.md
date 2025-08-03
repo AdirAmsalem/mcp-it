@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/adiramsalem-mcp-it-badge.png)](https://mseep.ai/app/adiramsalem-mcp-it)
+
 # `@mcp-it/fastify`
 
 > 🤖 Automatically generate MCP tools from your Fastify API routes.
